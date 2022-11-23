@@ -3,6 +3,10 @@ from selenium import webdriver
 from pyttsx3 import speak
 import subprocess
 import wolframalpha
+import ctypes
+from urllib.request import urlopen
+import win32com.client as wincl
+import json
 import pyjokes
 from time import ctime
 import time
@@ -203,7 +207,32 @@ def digital_assistant(data):
                 wb.open("https://www.linkedin.com/in/ayush-kumar-namdeo")
                 speak('opening his profile...... please wait')
     print(data)
-
+    
+    if 'news' in data:
+             
+            try:
+                jsonObj = urlopen('''https://newsapi.org / v1 / articles?source = the-times-of-india&sortBy = top&apiKey =\\times of India Api key\\''')
+                data = json.load(jsonObj)
+                i = 1
+                 
+                speak('here are some top news from the times of india')
+                print('''=============== TIMES OF INDIA ============'''+ '\n')
+                 
+                for item in data['articles']:
+                     
+                    print(str(i) + '. ' + item['title'] + '\n')
+                    print(item['description'] + '\n')
+                    speak(str(i) + '. ' + item['title'] + '\n')
+                    i += 1
+            except Exception as e:
+                 
+                print(str(e))
+ 
+         
+    if 'lock window' in data:
+                speak("locking the device")
+                ctypes.windll.user32.LockWorkStation()
+                
     lis: bool = True
     return lis
 
