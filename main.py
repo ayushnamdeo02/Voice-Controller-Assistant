@@ -1,6 +1,9 @@
 import speech_recognition as sr
 from selenium import webdriver
 from pyttsx3 import speak
+import subprocess
+import wolframalpha
+import pyjokes
 from time import ctime
 import time
 import webbrowser as wb
@@ -123,7 +126,7 @@ def digital_assistant(data):
         l = data.split(" ")
         loc = " ".join(l[2:])
         location_url = f"https://www.google.com/maps/place/{str(loc)}"
-        respond("Hold on Rishabh, I will show you where " + loc + " is.")
+        respond("Hold on Ayush, I will show you where " + loc + " is.")
         browser = webdriver.Chrome()
         browser.get(location_url)
         time.sleep(1)
@@ -134,7 +137,21 @@ def digital_assistant(data):
     
     if ("weather" or "climate") in data:
         weather.info(data)
-
+    
+    if 'joke' in data:
+            speak(pyjokes.get_joke())
+    
+    if "calculate" in data:
+             
+            app_id = "Wolframalpha api id"
+            client = wolframalpha.Client(app_id)
+            indx = data.lower().split().index('calculate')
+            query = data.split()[indx + 1:]
+            res = client.query(' '.join(query))
+            answer = next(res.results).text
+            print("The answer is " + answer)
+            speak("The answer is " + answer)
+            
     if "want to watch" in data or "stream" in data:  # i want to watch tanmay bhat on youtube
         l = data.split(" ")
         iofp = l.index("on")
